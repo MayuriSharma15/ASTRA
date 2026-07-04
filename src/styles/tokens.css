@@ -1,0 +1,173 @@
+/**
+ * ASTRA Design Tokens
+ * -----------------------------------------------------------------------
+ * Single source of truth for visual language. Components should NEVER
+ * hardcode a hex value, blur amount, or easing curve — reference a token.
+ *
+ * Naming convention: --{category}-{role}-{variant}
+ * This keeps intent readable at the call site: `var(--color-accent-core)`
+ * tells you WHY a color is used, not just what it looks like.
+ * ----------------------------------------------------------------------- */
+
+:root {
+  /* ======================================================================
+     COLOR — SURFACES
+     Cool micro-tints instead of flat #000 / #fff. Pure black reads cheap;
+     a near-black with a hint of navy in it reads intentional.
+     ====================================================================== */
+  --color-bg-void: #05050a;       /* base canvas — page background */
+  --color-bg-abyss: #0a0e1f;      /* deep navy — section alternation, card base */
+  --color-bg-elevated: #10142b;   /* raised surfaces — modals, dropdowns */
+
+  /* ======================================================================
+     COLOR — ACCENTS
+     Strict hierarchy, enforced by naming, not just convention:
+       core   = primary identity color (the reactor, primary CTAs)
+       signal = secondary/interactive (links, active states, highlights)
+       rare   = accent-of-accents — use sparingly, 1–2 moments per view
+     ====================================================================== */
+  --color-accent-core: #7c5cfc;        /* electric violet — ASTRA's identity color */
+  --color-accent-core-soft: #9b82ff;   /* lighter violet — hover/active state of core */
+  --color-accent-signal: #22d3ee;      /* soft cyan — interactive/secondary */
+  --color-accent-signal-soft: #67e8f9; /* lighter cyan — hover state */
+  --color-accent-rare: #ec4899;        /* pink — rare emphasis only */
+
+  /* ======================================================================
+     COLOR — TEXT
+     Cool-tinted whites/greys instead of pure white — reduces harsh
+     contrast against the near-black background, easier on the eyes
+     at premium-brightness displays.
+     ====================================================================== */
+  --color-text-primary: #f5f5fa;
+  --color-text-secondary: #a0a3bd;
+  --color-text-tertiary: #62657d;
+  --color-text-on-accent: #05050a;  /* text placed on top of bright accent fills */
+
+  /* ======================================================================
+     COLOR — GLASS / SURFACES
+     Glassmorphism fails when it's just low-opacity fill with no border.
+     The border + inner highlight is what sells "glass" over "grey box".
+     ====================================================================== */
+  --glass-fill: rgba(255, 255, 255, 0.04);
+  --glass-fill-hover: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-border-strong: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.06); /* inner top-edge highlight */
+  --glass-blur: 20px;
+  --glass-blur-strong: 32px;
+
+  /* ======================================================================
+     COLOR — GLOW / SHADOW
+     Glow is layered box-shadow, not element filter-blur (cheaper to
+     animate, avoids layout/paint perf issues on hover/pulse loops).
+     ====================================================================== */
+  --glow-core-sm: 0 0 24px rgba(124, 92, 252, 0.35);
+  --glow-core-md: 0 0 48px rgba(124, 92, 252, 0.4);
+  --glow-core-lg: 0 0 96px rgba(124, 92, 252, 0.35);
+  --glow-signal-sm: 0 0 24px rgba(34, 211, 238, 0.3);
+  --glow-signal-md: 0 0 48px rgba(34, 211, 238, 0.35);
+  --shadow-elevation-1: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevation-2: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-elevation-3: 0 16px 64px rgba(0, 0, 0, 0.6);
+
+  /* ======================================================================
+     TYPOGRAPHY
+     Display: geometric, bold, slightly technical — carries personality.
+     Body: neutral, highly legible — gets out of the way.
+     Mono: system/utility face — reinforces "Operating System" identity
+     for labels, stats, nav eyebrows. This is ASTRA's signature type move.
+     ====================================================================== */
+  --font-display: "Clash Display", "General Sans", -apple-system, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;    /* 12px — mono labels, captions */
+  --text-sm: 0.875rem;   /* 14px — secondary body */
+  --text-base: 1rem;     /* 16px — body */
+  --text-lg: 1.125rem;   /* 18px — lead paragraph */
+  --text-xl: 1.5rem;     /* 24px — card headings */
+  --text-2xl: 2rem;      /* 32px — section headings */
+  --text-3xl: 2.75rem;   /* 44px — sub-hero headings */
+  --text-4xl: 4rem;      /* 64px — hero headline */
+  --text-5xl: 5.5rem;    /* 88px — hero headline, desktop-large */
+
+  --tracking-tight: -0.03em;   /* headlines */
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;     /* mono labels/eyebrows, uppercase */
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.35;
+  --leading-relaxed: 1.6;
+
+  /* ======================================================================
+     SPACING
+     8pt-based scale. No arbitrary values in components — if a spacing
+     need doesn't exist here, that's a signal to add a token, not to
+     write mt-[13px] inline.
+     ====================================================================== */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* ======================================================================
+     RADIUS
+     ====================================================================== */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* ======================================================================
+     MOTION
+     Centralized so tuning "does this feel premium" is a token edit,
+     not a hunt across every component's Framer Motion config.
+     Easing curves modeled after Apple/Linear-style deceleration —
+     confident entry, soft settle. No linear or bouncy-default easing.
+     ====================================================================== */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);   /* default entrances */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);    /* reveals, fades */
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1); /* looping/orbit motion */
+
+  --duration-fast: 150ms;    /* micro-interactions, hover */
+  --duration-base: 300ms;    /* standard transitions */
+  --duration-slow: 600ms;    /* scroll reveals */
+  --duration-ambient: 8000ms; /* orbit loops, glow pulse, float */
+
+  /* Spring physics reference values (consumed via config/theme.js in JS,
+     mirrored here as a documentation source of truth) */
+  --spring-stiffness-snappy: 260;
+  --spring-damping-snappy: 20;
+  --spring-stiffness-gentle: 80;
+  --spring-damping-gentle: 14;
+
+  /* ======================================================================
+     Z-INDEX
+     Named layers prevent the classic "z-index: 9999" arms race.
+     ====================================================================== */
+  --z-background: 0;
+  --z-content: 10;
+  --z-navbar: 50;
+  --z-overlay: 100;
+  --z-modal: 200;
+}
+
+/* ==========================================================================
+   Reduced motion: components read this via JS (useReducedMotion hook), but
+   we also collapse ambient CSS-driven animation durations here as a
+   belt-and-suspenders fallback for anything not routed through Framer Motion.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+    --duration-ambient: 0ms;
+  }
+}

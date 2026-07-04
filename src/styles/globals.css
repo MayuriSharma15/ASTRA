@@ -1,0 +1,202 @@
+/* ==========================================================================
+   1. IMPORTS — must ALL come before any other CSS, including @tailwind,
+   which compiles into real rules. An @import after real rules is
+   silently ignored by the browser per the CSS spec — this was the bug.
+   ========================================================================== */
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "./tokens.css";
+
+/* ==========================================================================
+   2. TAILWIND LAYERS
+   ========================================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   3. RESETS & BASE DEFAULTS
+   (everything below this is unchanged from before — resets, focus styles,
+   scrollbar, selection, #root — leave that part of your file exactly as is)
+   ========================================================================== */
+
+/* ==========================================================================
+   3. DESIGN TOKENS
+   ========================================================================== */
+@import "./tokens.css";
+
+/* ==========================================================================
+   4. RESETS & BASE DEFAULTS
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-bg-void);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Headings default to the display face — components override size/weight
+   per context, but the family + tight tracking is the consistent identity. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+/* Mono utility face — applied via a class, not tag selector, since <code>
+   isn't the only place we use it (nav labels, stat eyebrows, etc). */
+.font-mono-label {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY — non-negotiable baseline
+   ========================================================================== */
+
+/* Never remove focus indication without a replacement. This ring uses the
+   signal-cyan accent so keyboard focus reads as distinctly different from
+   hover states (which use core-violet) — two different affordances,
+   two different colors, on purpose. */
+:focus-visible {
+  outline: 2px solid var(--color-accent-signal);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Mouse users don't need the ring clutter that keyboard users rely on */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Respect reduced-motion at the document level as a final fallback —
+   individual components should also check useReducedMotion() in JS,
+   this is the CSS-only safety net for anything that slips through. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   SELECTION & SCROLLBAR
+   Small details — but this is exactly the polish gap between "AI slop"
+   and "someone actually designed this."
+   ========================================================================== */
+
+::selection {
+  background-color: var(--color-accent-core);
+  color: var(--color-text-on-accent);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--glass-border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-bg-void);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent-core);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border-strong) var(--color-bg-void);
+}
+
+/* ==========================================================================
+   ROOT APP MOUNT
+   Ensures the app fills the viewport and establishes the stacking context
+   for our layered PageBackground system (z-background sits behind #root's
+   content layer, not behind #root itself).
+   ========================================================================== */
+
+#root {
+  position: relative;
+  isolation: isolate; /* new stacking context — background z-index math
+                          stays contained and predictable */
+  min-height: 100vh;
+  width: 100%;
+}
