@@ -1,27 +1,22 @@
 /**
  * AICore
  * -----------------------------------------------------------------------
- * The Hero's centerpiece — deliberately built as a layered "energy
- * reactor" rather than a single glowing circle, per the brief's
- * explicit direction: "should feel like an energy reactor, not a
- * glowing circle."
+ * The Hero's centerpiece — a layered "energy reactor."
  *
  * STRUCTURE (back to front):
  *   1. Outer ambient glow (soft, large, pulsing)
- *   2. Three concentric rotating rings, each a different speed/direction
- *      and dash pattern — this asymmetry is what reads as mechanical/
- *      energetic rather than a static decorative ring
- *   3. Two small "energy particles" riding along ring paths
- *   4. Inner core — bright gradient orb with the ASTRA mark, pulsing
- *
- * Rings are separate SVGs (not one SVG with multiple animated groups)
- * so each can rotate independently via its own Framer Motion transform —
- * simpler to reason about than nested SVG transform-origin math.
+ *   2. Whole-core breathing scale pulse (subtle — the entire reactor
+ *      feels like it's idling, not just its individual pieces animating
+ *      independently)
+ *   3. Three concentric rotating rings, each a different speed/direction
+ *      and dash pattern
+ *   4. Two energy particles riding different rings in opposite
+ *      directions — reads as active energy flow rather than a single
+ *      decorative dot
+ *   5. Inner core — bright gradient orb with the ASTRA mark, pulsing
  *
  * PROPS
- * @param {number} [size=280] - core diameter in px (Hero controls this
- *                                responsively via a wrapper, not this
- *                                component switching size itself)
+ * @param {number} [size=280]
  * ----------------------------------------------------------------------- */
 
 import { motion } from "framer-motion";
@@ -31,27 +26,35 @@ import { orbitSpin, glowPulse } from "../../lib/motion";
 
 const RINGS = [
   { sizeRatio: 1, dash: "1 14", strokeWidth: 1.5, duration: 24, direction: 1, opacity: 0.5 },
-  { sizeRatio: 0.78, dash: "6 10", strokeWidth: 1.5, duration: 18, direction: -1, opacity: 0.4 },
+  { sizeRatio: 0.78, dash: "6 10", strokeWidth: 1.5, duration: 18, direction: -1, opacity: 0.45 },
   { sizeRatio: 0.56, dash: "3 3", strokeWidth: 1, duration: 12, direction: 1, opacity: 0.6 },
 ];
 
 export function AICore({ size = 280 }) {
   const prefersReducedMotion = useReducedMotion();
 
+  const breathe = prefersReducedMotion
+    ? undefined
+    : {
+        scale: [1, 1.035, 1],
+        transition: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+      };
+
   return (
-    <div
+    <motion.div
       className="relative flex items-center justify-center"
       style={{ width: size, height: size }}
+      animate={breathe}
     >
       {/* Ambient outer glow */}
       <motion.div
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "radial-gradient(circle, rgba(124,92,252,0.45) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(124,92,252,0.5) 0%, transparent 70%)",
           filter: "blur(40px)",
         }}
-        animate={prefersReducedMotion ? undefined : glowPulse(5).animate}
+        animate={prefersReducedMotion ? undefined : glowPulse(4).animate}
       />
 
       {/* Rotating rings */}
@@ -81,7 +84,7 @@ export function AICore({ size = 280 }) {
         );
       })}
 
-      {/* Energy particles riding the outermost ring */}
+      {/* Energy particle — outer ring, clockwise */}
       {!prefersReducedMotion && (
         <motion.div
           className="absolute inset-0"
@@ -100,6 +103,27 @@ export function AICore({ size = 280 }) {
         </motion.div>
       )}
 
+      {/* Energy particle — middle ring, counter-clockwise, different
+          speed so the two particles never sync up predictably */}
+      {!prefersReducedMotion && (
+        <motion.div
+          className="absolute"
+          style={{ width: size * 0.78, height: size * 0.78 }}
+          animate={{ rotate: -360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        >
+          <div
+            className="absolute w-1.5 h-1.5 rounded-full bg-accent-core"
+            style={{
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              boxShadow: "0 0 10px var(--color-accent-core)",
+            }}
+          />
+        </motion.div>
+      )}
+
       {/* Inner core */}
       <motion.div
         className="relative flex items-center justify-center rounded-full border border-accent-core/40"
@@ -109,7 +133,7 @@ export function AICore({ size = 280 }) {
           background:
             "radial-gradient(circle at 35% 30%, rgba(155,130,255,0.9) 0%, rgba(124,92,252,0.6) 45%, rgba(124,92,252,0.15) 100%)",
         }}
-        animate={prefersReducedMotion ? undefined : glowPulse(4).animate}
+        animate={prefersReducedMotion ? undefined : glowPulse(3.5).animate}
       >
         <div className="absolute inset-0 rounded-full shadow-glow-core-lg" />
         <Orbit
@@ -118,6 +142,6 @@ export function AICore({ size = 280 }) {
           className="text-text-on-accent relative z-10"
         />
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
