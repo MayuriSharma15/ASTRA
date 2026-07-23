@@ -2,20 +2,15 @@
  * Hero
  * -----------------------------------------------------------------------
  * ASTRA's signature section — headline + CTA above, the AI Core reactor
- * with orbiting career modules below. This is the first thing every
- * visitor sees, and per the brief, it needs to communicate "ASTRA
- * connects your entire career" without requiring the user to read a
- * word of copy.
+ * with orbiting career modules below.
  *
- * RESPONSIVE ORBIT SIZING: rather than hardcoding different radius
- * values per breakpoint, the orbit container measures its own rendered
- * width via ResizeObserver and derives both the core size and orbit
- * radius as proportions of that measurement. This means the whole
- * system scales smoothly at any viewport width instead of jumping
- * between a few fixed breakpoint values.
+ * UPDATED: "Get Started Free" now actually navigates to /signup via
+ * React Router's useNavigate — previously this button had no onClick
+ * at all and did nothing when clicked.
  * ----------------------------------------------------------------------- */
 
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight, PlayCircle } from "lucide-react";
 import { Section } from "../layout/Section";
 import { Container } from "../layout/Container";
@@ -27,6 +22,7 @@ import { OrbitModule } from "./OrbitModule";
 import { orbitModules } from "../../data/orbitModules";
 
 export function Hero() {
+  const navigate = useNavigate();
   const orbitContainerRef = useRef(null);
   const [containerSize, setContainerSize] = useState(400);
 
@@ -75,7 +71,12 @@ export function Hero() {
 
         <ScrollReveal delay={0.3}>
           <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-            <Button variant="primary" size="lg" icon={ArrowRight}>
+            <Button
+              variant="primary"
+              size="lg"
+              icon={ArrowRight}
+              onClick={() => navigate("/signup")}
+            >
               Get Started Free
             </Button>
             <Button variant="secondary" size="lg" icon={PlayCircle} iconPosition="left">

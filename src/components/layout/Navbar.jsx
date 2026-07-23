@@ -1,18 +1,17 @@
 /**
  * Navbar
  * -----------------------------------------------------------------------
- * Sticky top navigation. Transparent at page top, transitions to a glass
- * surface once scrolled — this is the single most common "premium dark
- * UI" tell (Linear, Vercel, Arc all do this) because a nav that's always
- * opaque fights the Hero for visual weight in the first viewport.
- *
- * MOBILE: below md breakpoint, nav links collapse into a hamburger menu
- * that expands as a full-width glass panel — AnimatePresence handles
- * the mount/unmount animation.
+ * UPDATED: added a visible "Log In" link for returning users (this was
+ * missing entirely before — the only way to reach /login was typing the
+ * URL manually or being redirected there). "Get Started" now correctly
+ * points to /signup instead of /dashboard — sending an unauthenticated
+ * visitor straight to /dashboard just bounces them to /login anyway via
+ * ProtectedRoute, so linking directly to /signup is more direct.
  * ----------------------------------------------------------------------- */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Menu, X, Orbit } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/Button";
@@ -22,14 +21,11 @@ import { navLinks } from "../../data/navLinks";
 export function Navbar() {
   const { scrolled } = useScrollPosition(20);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
 
   function handleMobileLinkClick(e, href) {
     e.preventDefault();
     setMobileOpen(false);
-    // Wait for the mobile menu's collapse animation (300ms) to finish
-    // before scrolling — scrolling while the page height is still
-    // changing underneath causes the jump to land in the wrong place
-    // or get silently cancelled by the browser.
     window.setTimeout(() => {
       document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     }, 320);
@@ -70,8 +66,14 @@ export function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden md:block">
-          <Button variant="primary" size="sm">
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={() => navigate("/login")}
+            className="text-sm text-text-secondary hover:text-text-primary transition-colors duration-fast font-body px-2"
+          >
+            Log In
+          </button>
+          <Button variant="primary" size="sm" onClick={() => navigate("/signup")}>
             Get Started
           </Button>
         </div>
@@ -107,8 +109,27 @@ export function Navbar() {
                   </a>
                 </li>
               ))}
-              <li className="pt-2">
-                <Button variant="primary" size="md" fullWidth>
+              <li className="pt-2 flex flex-col gap-2">
+                <Button
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate("/login");
+                  }}
+                >
+                  Log In
+                </Button>
+                <Button
+                  variant="primary"
+                  size="md"
+                  fullWidth
+                  onClick={() => {
+                    setMobileOpen(false);
+                    navigate("/signup");
+                  }}
+                >
                   Get Started
                 </Button>
               </li>

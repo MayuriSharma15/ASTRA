@@ -1,17 +1,13 @@
 /**
  * FinalCTA
  * -----------------------------------------------------------------------
- * Closing conversion moment before the Footer. Landing pages that end
- * abruptly at FAQ leave the strongest intent-to-act moment (someone who
- * just read through the whole page) with nowhere to go except scroll
- * back up. This section exists specifically to capture that moment.
+ * Closing conversion moment before the Footer.
  *
- * Visually distinct from every other section — a bounded glass panel
- * with its own dedicated glow, rather than blending into the page flow
- * like Features/Journey/Vision do. It should feel like arriving
- * somewhere, not just another scroll-stop.
+ * UPDATED: "Get Started Free" now actually navigates to /signup —
+ * previously had no onClick handler at all.
  * ----------------------------------------------------------------------- */
 
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Section } from "../layout/Section";
 import { Container } from "../layout/Container";
@@ -21,6 +17,8 @@ import { Button } from "../ui/Button";
 import { ScrollReveal } from "../animations/ScrollReveal";
 
 export function FinalCTA() {
+  const navigate = useNavigate();
+
   return (
     <Section id="get-started" spacing="md">
       <Container size="default">
@@ -46,7 +44,12 @@ export function FinalCTA() {
             </p>
 
             <div className="mt-8">
-              <Button variant="primary" size="lg" icon={ArrowRight}>
+              <Button
+                variant="primary"
+                size="lg"
+                icon={ArrowRight}
+                onClick={() => navigate("/signup")}
+              >
                 Get Started Free
               </Button>
             </div>
